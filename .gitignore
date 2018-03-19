@@ -1,0 +1,19 @@
+# IDE and OS ignores
+.vscode/
+
+db.sqlite3
+
+# Python ignores
+venv
+bin
+include
+lib
+pip-selfcheck.json
+__pycache__
+*.py[co]
+
+# JS ignores
+node_modules/
+yarn-error.log
+static/bundles
+webpack-stats.json
