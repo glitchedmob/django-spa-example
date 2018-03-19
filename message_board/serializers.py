@@ -3,15 +3,15 @@ from rest_framework import serializers
 
 from message_board.models import Post
 
-class PostSerializer(serializers.HyperlinkedModelSerializer):
+class PostSerializer(serializers.Serializer):
 
-    class Meta:
-        model = Post
-        fields = ('url', 'id', 'title', 'body')
+    id = serializers.IntegerField(read_only=True)
+    title = serializers.CharField(required=False, allow_blank=True, max_length=100)
+    code = serializers.CharField(required=False, allow_blank=True)
 
-
-class UserSerializer(serializers.HyperlinkedModelSerializer):
-
-    class Meta:
-        model = User
-        fields = ('url', 'id', 'username')
+    def create(self, validated_data):
+        return Post.objects.create(**validated_data)
+    
+    def update(self, instance, validated_data):
+        instance.title = validated_data.data.get('title', instance.title)
+        instance.body = validated_data.data.get('body', instance.body)
