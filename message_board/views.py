@@ -1,17 +1,23 @@
 from django.contrib.auth.models import User
-from rest_framework import permissions
-from rest_framework import viewsets
+from rest_framework import status
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 
 from message_board.models import Post
 from message_board.serializers import PostSerializer
 from message_board.serializers import UserSerializer
 
-class PostViewSet(viewsets.ModelViewSet):
-    queryset = Post.objects.all()
-    serializer_class = PostSerializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
+@api_view(['GET', 'POST'])
+def post_list(request):
+    if request.method == 'GET':
+        posts = Post.objects.all()
+        serializer = PostSerializer(posts, many=True)
+        return Response(serializer.data)
 
-class UserViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
+    elif request.method == 'POST':
+        serializer = PostSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

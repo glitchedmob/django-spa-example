@@ -3,15 +3,15 @@ from rest_framework import serializers
 
 from message_board.models import Post
 
-class PostSerializer(serializers.HyperlinkedModelSerializer):
+class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ('url', 'id', 'title', 'body')
+        fields = ('id', 'title', 'body')
 
 
-class UserSerializer(serializers.HyperlinkedModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('url', 'id', 'username')
+        fields = ('id', 'username')
